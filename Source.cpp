@@ -8,14 +8,14 @@ int main()
 	std::cin >> str;
 	std::cout << "stolbci= ";
 	std::cin >> stb;
-	//std::cout << "Vvedite dannie matricy a ";
+	std::cout << "Vvedite dannie matricy a ";
 	for (i = 0; i < str; i++) // vvod matrici a
 		for (j = 0; j < stb; j++)
 		{
 			std::cout << "a[" << i << "]" << "[" << j << "] ";
 			std::cin >> a[i][j];
 		}
-	//std::cout << "Vvedite dannie matricy b ";
+	std::cout << "Vvedite dannie matricy b ";
 	for (i = 0; i < str; i++) // vvod matrici b
 		for (j = 0; j < stb; j++)
 		{
