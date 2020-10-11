@@ -1,86 +1,139 @@
 #include <iostream>
-#include <iomanip>
+using namespace std;
 
-int input_check(int a) // proverka na vvod
+class matrix
 {
-	while (true)
-	{
-		std::cin >> a;
-		if (!std::cin)
-		{
-			std::cout << "ne verno vveli, povtorite vvod\n";
-			std::cin.clear();
-			while (std::cin.get() != '\n');
-		}
-		else break;
-	}
-	return a;
+    int Row, Col;  //строки и столбцы
+    double** Value;  // элементы матрицы
+public:
+
+    matrix(int, int);  //конструктор
+    matrix(const matrix&); //копирующий конструктор - создает копию объекта m
+    int GetRow(); //метод получает значение числа строк
+    int GetCol(); //метод получает значение числа столбцов
+
+    friend ostream& operator<<(ostream& ostr, matrix& m);//перегрузка оператора вывода
+    friend istream& operator>>(istream& istr, matrix& m);//перегрузка оператора ввода
+    friend matrix operator-(matrix& m1, matrix& m2);//перегрузка оператора минус (бинарный)
+    friend bool operator== (matrix& m1, matrix& m2);//перегрузка оператора сравнения
+
+    ~matrix(); //деструктор
+
+    matrix& operator=(const matrix& m)
+    {
+        matrix tmp(m);
+        swap(tmp);
+        return *this;
+    }
+
+private:
+    void swap(matrix& m)
+    {
+        {
+            int tmp = Row; Row = m.Row; m.Row = tmp;
+            tmp = Col; Col = m.Col; m.Col = tmp;
+        }
+        double** tmp = Value; Value = m.Value; m.Value = tmp;
+    }
+
+};
+
+
+matrix::matrix(int row, int col)
+{
+    Row = row;  //переменным Row и Col присваиются вводимые значения числа строк и столбцов матрицы
+    Col = col;
+    Value = new double* [row];  //конструктор создает двумерный динамический массив
+    for (int i = 0; i < row; i++) Value[i] = new double[col];
+}
+
+matrix::matrix(const matrix& m) //копирующий конструктор - создает копию матрицы m
+    :Row(m.Row), Col(m.Col)
+{
+    Value = new double* [Row];
+    for (int i = 0; i < Row; i++)  Value[i] = new double[Col];
+    for (int i = 0; i < Row; i++)
+    {
+        for (int j = 0; j < Col; j++)
+            Value[i][j] = m.Value[i][j];
+    } // значения элементов матрицы будут такими же, как у матрицы m
+}
+
+int matrix::GetRow() //функция получает значение числа строк
+{
+    return (Row);
+}
+
+int matrix::GetCol() //функция получает значение числа столбцов
+{
+    return (Col);
+}
+
+istream& operator>>(istream& istr, matrix& m) // перегрузка оператора ввода матрицы
+{
+    for (int i = 0; i < m.GetRow(); i++)
+        for (int j = 0; j < m.GetCol(); j++)
+            istr >> m.Value[i][j];
+    return(istr);
+}
+
+ostream& operator<<(ostream& ostr, matrix& m) //перегрузка оператора вывода матрицы
+{
+    for (int i = 0; i < m.GetRow(); i++)
+    {
+        for (int j = 0; j < m.GetCol(); j++)
+            ostr << m.Value[i][j] << "\t";
+        ostr << "\n";
+    }
+    return(ostr);
+}
+
+
+matrix operator-(matrix& m1, matrix& m2) //перегрузка оператора минус (бинарный)
+{
+    matrix temp1(m1.GetRow(), m1.GetCol());
+    for (int i = 0; i < m1.GetRow(); i++)
+        for (int j = 0; j < m1.GetCol(); j++)
+            temp1.Value[i][j] = m1.Value[i][j] - m2.Value[i][j];
+    return(temp1);
+}
+
+bool operator==(matrix& m1, matrix& m2)
+{
+    if (m1.GetRow()!= m2.GetRow() && m1.GetCol() != m2.GetCol())
+        return false;
+    int i,j;
+    for (i = 0; i < m1.GetRow(); i++)
+        for (j = 0; j < m1.GetCol(); j++)
+            if (m1.Value[i][j] != m2.Value[i][j])
+                return false;
+    return true;
+}
+
+matrix::~matrix() //деструктор
+{
+    for (int i = 0; i < Row; i++)
+        delete[] Value[i]; //деструктор удаляет из памяти динамический массив, созданный конструктором
+    delete[] Value;
 }
 
 int main()
 {
-	std::cout << "Vvedite razmernost matric \n";
-	int a[100][100], b[100][100], i, j, str_1=0, stb_1=0, str_2=0, stb_2=0, str_max, stb_max;
-	std::cout << "stroki_1_matrici=  ";
-	str_1=input_check(str_1);
-	std::cout << "stolbci_1_matrici= ";
-	stb_1=input_check(stb_1);
-	std::cout << "stroki_2_matrici=  ";
-	str_2=input_check(str_2);
-	std::cout << "stolbci_2_matrici= ";
-	stb_2=input_check(stb_2);
-	str_max = str_1;
-	stb_max = stb_1;
-	if (str_2 > str_1)
-		str_max = str_2;
-	if (stb_2 > stb_1)
-		stb_max = stb_2;
-	for (i = 0; i < str_max; i++) // obnylenie matric
-		for (j = 0; j < stb_max; j++)
-		{
-			a[i][j] = 0;
-			b[i][j] = 0;
-		}
-	std::cout << "Vvedite dannie matricy a ";
-	for (i = 0; i < str_1; i++) // vvod matrici a
-		for (j = 0; j < stb_1; j++)
-		{
-			//std::cout << "a[" << i << "]" << "[" << j << "] ";
-			a[i][j]=input_check(a[i][j]);
-		}
-	std::cout << "Vvedite dannie matricy b ";
-	for (i = 0; i < str_2; i++) // vvod matrici b
-		for (j = 0; j < stb_2; j++)
-		{
-			//std::cout << "b[" << i << "]" << "[" << j << "] ";
-			b[i][j]= input_check(b[i][j]);
-		}
-	std::cout << "\n";
-	for (i = 0; i < str_1; i++) // vivod matrici a
-	{
-		for (j = 0; j < stb_1; j++)
-		{
-			std::cout << "a[" << i << "]" << "[" << j << "] " << std::setw(5) << a[i][j] << " ";
-		}
-		std::cout << "\n";
-	}
-	std::cout << "\n";
-	for (i = 0; i < str_2; i++) // vivod matrici b
-	{
-		for (j = 0; j < stb_2; j++)
-		{
-			std::cout << "b[" << i << "]" << "[" << j << "] " << std::setw(5) << b[i][j] << " ";
-		}
-		std::cout << "\n";
-	}
-	std::cout << "\n";
-	for (i = 0; i < str_max; i++)
-	{
-		for (j = 0; j < stb_max; j++)
-		{
-			a[i][j] = a[i][j] + b[i][j];
-			std::cout  <<"a[" << i << "]" << "[" << j << "] " << std::setw(5) << a[i][j] << " ";
-		}
-		std::cout << "\n";
-	}
+    matrix a(2, 3);
+    cout << "enter matrix a(2x3)";
+    cin >> a;
+    matrix b(2, 3);
+    cout << "enter matrix b(2x3)";
+    cin >> b;
+    cout << "enter matrix c(2x2)";
+    matrix c(2, 2);
+    cin >> c;
+    matrix d(2, 2);
+    cout << "enter matrix d(2x2)";
+    cin >> d;
+    if (b == c)
+        cout << "b==c";
+    d= d - c;
+    cout << d;
+    return 0;
 }
