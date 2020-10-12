@@ -3,21 +3,21 @@ using namespace std;
 
 class matrix
 {
-    int Row, Col;  //строки и столбцы
-    double** Value;  // элементы матрицы
+    int Row, Col; 
+    int** Value;  
 public:
 
-    matrix(int, int);  //конструктор
-    matrix(const matrix&); //копирующий конструктор - создает копию объекта m
-    int GetRow(); //метод получает значение числа строк
-    int GetCol(); //метод получает значение числа столбцов
+    matrix(int, int);  //РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
+    matrix(const matrix&); //РєРѕРїРёСЂСѓСЋС‰РёР№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ - СЃРѕР·РґР°РµС‚ РєРѕРїРёСЋ РѕР±СЉРµРєС‚Р° m
+    int GetRow(); //С‡РёСЃР»Рѕ СЃС‚СЂРѕРє
+    int GetCol(); //С‡РёСЃР»Рѕ СЃС‚РѕР»Р±С†РѕРІ
 
-    friend ostream& operator<<(ostream& ostr, matrix& m);//перегрузка оператора вывода
-    friend istream& operator>>(istream& istr, matrix& m);//перегрузка оператора ввода
-    friend matrix operator-(matrix& m1, matrix& m2);//перегрузка оператора минус (бинарный)
-    friend bool operator== (matrix& m1, matrix& m2);//перегрузка оператора сравнения
+    friend ostream& operator<<(ostream& ostr, matrix& m);//РїРµСЂРµРіСЂСѓР·РєР° РѕРїРµСЂР°С‚РѕСЂР° РІС‹РІРѕРґР°
+    friend istream& operator>>(istream& istr, matrix& m);//РїРµСЂРµРіСЂСѓР·РєР° РѕРїРµСЂР°С‚РѕСЂР° РІРІРѕРґР°
+    friend matrix operator-(matrix& m1, matrix& m2);//РїРµСЂРµРіСЂСѓР·РєР° РѕРїРµСЂР°С‚РѕСЂР° РјРёРЅСѓСЃ
+    friend bool operator== (matrix& m1, matrix& m2);//РїРµСЂРµРіСЂСѓР·РєР° РѕРїРµСЂР°С‚РѕСЂР° СЃСЂР°РІРЅРµРЅРёСЏ
 
-    ~matrix(); //деструктор
+    ~matrix(); //РґРµСЃС‚СЂСѓРєС‚РѕСЂ
 
     matrix& operator=(const matrix& m)
     {
@@ -33,7 +33,7 @@ private:
             int tmp = Row; Row = m.Row; m.Row = tmp;
             tmp = Col; Col = m.Col; m.Col = tmp;
         }
-        double** tmp = Value; Value = m.Value; m.Value = tmp;
+        int** tmp = Value; Value = m.Value; m.Value = tmp;
     }
 
 };
@@ -41,35 +41,34 @@ private:
 
 matrix::matrix(int row, int col)
 {
-    Row = row;  //переменным Row и Col присваиются вводимые значения числа строк и столбцов матрицы
+    Row = row;  
     Col = col;
-    Value = new double* [row];  //конструктор создает двумерный динамический массив
-    for (int i = 0; i < row; i++) Value[i] = new double[col];
+    Value = new int* [row]; 
+    for (int i = 0; i < row; i++) Value[i] = new int[col];
 }
 
-matrix::matrix(const matrix& m) //копирующий конструктор - создает копию матрицы m
+matrix::matrix(const matrix& m) //РєРѕРїРёСЂСѓСЋС‰РёР№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ - СЃРѕР·РґР°РµС‚ РєРѕРїРёСЋ РјР°С‚СЂРёС†С‹ m
     :Row(m.Row), Col(m.Col)
 {
-    Value = new double* [Row];
-    for (int i = 0; i < Row; i++)  Value[i] = new double[Col];
+    Value = new int* [Row];
+    for (int i = 0; i < Row; i++)  Value[i] = new int[Col];
     for (int i = 0; i < Row; i++)
     {
         for (int j = 0; j < Col; j++)
             Value[i][j] = m.Value[i][j];
-    } // значения элементов матрицы будут такими же, как у матрицы m
-}
+    } 
 
-int matrix::GetRow() //функция получает значение числа строк
+int matrix::GetRow() //С‡РёСЃР»Рѕ СЃС‚СЂРѕРє
 {
     return (Row);
 }
 
-int matrix::GetCol() //функция получает значение числа столбцов
+int matrix::GetCol() // С‡РёСЃР»Рѕ СЃС‚РѕР»Р±С†РѕРІ
 {
     return (Col);
 }
 
-istream& operator>>(istream& istr, matrix& m) // перегрузка оператора ввода матрицы
+istream& operator>>(istream& istr, matrix& m) // РїРµСЂРµРіСЂСѓР·РєР° РѕРїРµСЂР°С‚РѕСЂР° РІРІРѕРґР° РјР°С‚СЂРёС†С‹
 {
     for (int i = 0; i < m.GetRow(); i++)
         for (int j = 0; j < m.GetCol(); j++)
@@ -77,7 +76,7 @@ istream& operator>>(istream& istr, matrix& m) // перегрузка оператора ввода матр
     return(istr);
 }
 
-ostream& operator<<(ostream& ostr, matrix& m) //перегрузка оператора вывода матрицы
+ostream& operator<<(ostream& ostr, matrix& m) //РїРµСЂРµРіСЂСѓР·РєР° РѕРїРµСЂР°С‚РѕСЂР° РІС‹РІРѕРґР° РјР°С‚СЂРёС†С‹
 {
     for (int i = 0; i < m.GetRow(); i++)
     {
@@ -89,7 +88,7 @@ ostream& operator<<(ostream& ostr, matrix& m) //перегрузка оператора вывода матр
 }
 
 
-matrix operator-(matrix& m1, matrix& m2) //перегрузка оператора минус (бинарный)
+matrix operator-(matrix& m1, matrix& m2) //РїРµСЂРµРіСЂСѓР·РєР° РѕРїРµСЂР°С‚РѕСЂР° РјРёРЅСѓСЃ 
 {
     matrix temp1(m1.GetRow(), m1.GetCol());
     for (int i = 0; i < m1.GetRow(); i++)
@@ -110,10 +109,10 @@ bool operator==(matrix& m1, matrix& m2)
     return true;
 }
 
-matrix::~matrix() //деструктор
+matrix::~matrix() //РґРµСЃС‚СЂСѓРєС‚РѕСЂ
 {
     for (int i = 0; i < Row; i++)
-        delete[] Value[i]; //деструктор удаляет из памяти динамический массив, созданный конструктором
+        delete[] Value[i]; 
     delete[] Value;
 }
 
