@@ -43,12 +43,83 @@ matrix::matrix(int row, int col)
 {
     Row = row;  
     Col = col;
-    Value = new int* [row]; 
+    Value = new int* [row]; #include <iostream>
+using namespace std;
+
+class matrix
+{
+    int Row, Col;  
+    int** Value;
+
+public:
+    matrix()
+    {
+        Row = 0;
+        Col = 0;
+        Value = new int* [Row];
+        for (int i = 0; i < Row; i++)
+            Value[i] = new int[Col];
+        for (int i = 0; i < Row; i++)
+            for (int j = 0; j < Col; j++)
+                Value[i][j] = 0;
+    }
+
+    matrix(int, int);  //конструктор
+    matrix(int, int, int**);  //конструктор
+    matrix(const matrix&); //копирующий конструктор - создает копию объекта m
+    void Print_element(int , int j);
+    void Set_element(int, int, int);
+    int GetRow(); //число строк
+    int GetCol(); //число столбцов
+
+    friend ostream& operator<<(ostream& ostr, matrix& m);//перегрузка оператора вывода
+    friend istream& operator>>(istream& istr, matrix& m);//перегрузка оператора ввода
+    friend matrix operator-(matrix& m1, matrix& m2);//перегрузка минуса 
+    friend bool operator== (matrix& m1, matrix& m2);//перегрузка сравнения
+
+    ~matrix(); 
+
+    matrix& operator=(const matrix& m)
+    {
+        matrix tmp(m);
+        swap(tmp);
+        return *this;
+    }
+
+private:
+    void swap(matrix& m)
+    {
+        {
+            int tmp = Row; Row = m.Row; m.Row = tmp;
+            tmp = Col; Col = m.Col; m.Col = tmp;
+        }
+        int** tmp = Value; Value = m.Value; m.Value = tmp;
+    }
+
+};
+
+
+matrix::matrix(int row, int col, int** mas)
+{
+    Row = row;  
+    Col = col;
+    Value = new int* [row];  
+    for (int i = 0; i < row; i++) Value[i] = new int[col];
+    for (int i = 0; i < row; i++)
+        for (int j = 0; j < col; j++)
+            Value[i][j] = mas[i][j];
+}
+
+matrix::matrix(int row, int col)
+{
+    Row = row;
+    Col = col;
+    Value = new int* [row];
     for (int i = 0; i < row; i++) Value[i] = new int[col];
 }
 
 matrix::matrix(const matrix& m) //копирующий конструктор - создает копию матрицы m
-    :Row(m.Row), Col(m.Col)
+    :Row(m.Row), Col(m.Col) // инициализация строк и столбцов
 {
     Value = new int* [Row];
     for (int i = 0; i < Row; i++)  Value[i] = new int[Col];
@@ -56,19 +127,29 @@ matrix::matrix(const matrix& m) //копирующий конструктор - 
     {
         for (int j = 0; j < Col; j++)
             Value[i][j] = m.Value[i][j];
-    } 
-
+    }
+}
 int matrix::GetRow() //число строк
 {
     return (Row);
 }
 
-int matrix::GetCol() // число столбцов
+int matrix::GetCol() //число столбцов
 {
     return (Col);
 }
 
-istream& operator>>(istream& istr, matrix& m) // перегрузка оператора ввода матрицы
+void matrix::Print_element(int i, int j)
+{
+    cout << Value[i][j] << "\n";
+}
+
+void matrix::Set_element(int i, int j, int num)
+{
+    Value[i][j]=num;
+}
+
+istream& operator>>(istream& istr, matrix& m) // ввод матрицы
 {
     for (int i = 0; i < m.GetRow(); i++)
         for (int j = 0; j < m.GetCol(); j++)
@@ -76,19 +157,19 @@ istream& operator>>(istream& istr, matrix& m) // перегрузка опера
     return(istr);
 }
 
-ostream& operator<<(ostream& ostr, matrix& m) //перегрузка оператора вывода матрицы
+ostream& operator<<(ostream& out, matrix& m) //вывод матрицы
 {
     for (int i = 0; i < m.GetRow(); i++)
     {
         for (int j = 0; j < m.GetCol(); j++)
-            ostr << m.Value[i][j] << "\t";
-        ostr << "\n";
+            out << m.Value[i][j] << "\t";
+        out << "\n";
     }
-    return(ostr);
+    return(out);
 }
 
 
-matrix operator-(matrix& m1, matrix& m2) //перегрузка оператора минус 
+matrix operator-(matrix& m1, matrix& m2) //перегрузка минуса
 {
     matrix temp1(m1.GetRow(), m1.GetCol());
     for (int i = 0; i < m1.GetRow(); i++)
@@ -109,30 +190,69 @@ bool operator==(matrix& m1, matrix& m2)
     return true;
 }
 
-matrix::~matrix() //деструктор
+matrix::~matrix() 
 {
     for (int i = 0; i < Row; i++)
-        delete[] Value[i]; 
+        delete[] Value[i];
     delete[] Value;
 }
 
 int main()
 {
-    matrix a(2, 3);
-    cout << "enter matrix a(2x3)";
-    cin >> a;
-    matrix b(2, 3);
-    cout << "enter matrix b(2x3)";
-    cin >> b;
-    cout << "enter matrix c(2x2)";
-    matrix c(2, 2);
-    cin >> c;
-    matrix d(2, 2);
-    cout << "enter matrix d(2x2)";
-    cin >> d;
-    if (b == c)
-        cout << "b==c";
-    d= d - c;
-    cout << d;
+    matrix a,b,c,d;
+    matrix mas[3];
+    int** el;
+    int i, j, row, col,k, num;
+    for( k=0; k<3; k++)
+    {
+        cout << "enter Row \n";
+        cin >> row;
+        cout << "enter Col\n";
+        cin >> col;
+        el = new int* [row];
+        for (int i = 0; i < row; i++)
+            el[i] = new int[col];
+        for (int i = 0; i < row; i++)
+            for (int j = 0; j < col; j++)
+            {
+                cin >> el[i][j];
+            }
+        mas[k] = { row, col, el };
+    }
+
+    cout << "--------------------------------\n";
+    cout << "mas[1]\n";
+    cout << mas[0];
+
+    cout << "--------------------------------\n";
+    cout << "mas[2]\n";
+    cout << mas[1];
+
+    cout << "--------------------------------\n";
+    cout << "mas[3]\n";
+    cout << mas[2];
+    cout << "--------------------------------\n";
+
+    cout << "enter row\n";
+    cin >> row;
+    cout << "enter col\n";
+    cin >> col;
+    cout << "enter mas index\n";
+    cin >> k;
+    mas[k-1].Print_element(row-1,col-1);
+
+    cout << "enter row\n";
+    cin >> row;
+    cout << "enter col\n";
+    cin >> col;
+    cout << "enter num\n";
+    cin >> num;
+    cout << "enter mas index\n";
+    cin >> k;
+    mas[k-1].Set_element(row-1, col-1,num);
+    cout << mas[k-1] << "\n";
+    matrix raz;
+    raz = mas[0] - mas[1];
+    cout <<"=======================\n"<<"mas[0]-mas[1]\n"<< raz;
     return 0;
 }
