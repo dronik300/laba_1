@@ -8,14 +8,14 @@ class matrix
 public:
 
     matrix(int, int);  //конструктор
-    matrix(const matrix&); //копирующий конструктор - создает копию объекта m
+    matrix(const matrix&); //копирующий конструктор
     int GetRow(); //число строк
     int GetCol(); //число столбцов
 
-    friend ostream& operator<<(ostream& ostr, matrix& m);//перегрузка оператора вывода
-    friend istream& operator>>(istream& istr, matrix& m);//перегрузка оператора ввода
-    friend matrix operator-(matrix& m1, matrix& m2);//перегрузка оператора минус
-    friend bool operator== (matrix& m1, matrix& m2);//перегрузка оператора сравнения
+    friend ostream& operator<<(ostream& ostr, matrix& m);//перегрузка вывода
+    friend istream& operator>>(istream& istr, matrix& m);//перегрузка ввода
+    friend matrix operator-(matrix& m1, matrix& m2);//перегрузка минус
+    friend bool operator== (matrix& m1, matrix& m2);//перегрузка сравнения
 
     ~matrix(); //деструктор
 
@@ -72,8 +72,8 @@ public:
     int GetRow(); //число строк
     int GetCol(); //число столбцов
 
-    friend ostream& operator<<(ostream& ostr, matrix& m);//перегрузка оператора вывода
-    friend istream& operator>>(istream& istr, matrix& m);//перегрузка оператора ввода
+    friend ostream& operator<<(ostream& ostr, matrix& m);//перегрузка вывода
+    friend istream& operator>>(istream& istr, matrix& m);//перегрузка ввода
     friend matrix operator-(matrix& m1, matrix& m2);//перегрузка минуса 
     friend bool operator== (matrix& m1, matrix& m2);//перегрузка сравнения
 
@@ -149,12 +149,12 @@ void matrix::Set_element(int i, int j, int num)
     Value[i][j]=num;
 }
 
-istream& operator>>(istream& istr, matrix& m) // ввод матрицы
+istream& operator>>(istream& in, matrix& m) // ввод матрицы
 {
     for (int i = 0; i < m.GetRow(); i++)
         for (int j = 0; j < m.GetCol(); j++)
-            istr >> m.Value[i][j];
-    return(istr);
+            in >> m.Value[i][j];
+    return(in);
 }
 
 ostream& operator<<(ostream& out, matrix& m) //вывод матрицы
@@ -245,10 +245,10 @@ int main()
     cin >> row;
     cout << "enter col\n";
     cin >> col;
-    cout << "enter num\n";
-    cin >> num;
     cout << "enter mas index\n";
     cin >> k;
+    cout << "enter num\n";
+    cin >> num;
     mas[k-1].Set_element(row-1, col-1,num);
     cout << mas[k-1] << "\n";
     matrix raz;
