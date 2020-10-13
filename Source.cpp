@@ -188,6 +188,7 @@ int main()
         el = new int* [row];
         for (int i = 0; i < row; i++)
             el[i] = new int[col];
+        cout << "enter matrix\n";
         for (int i = 0; i < row; i++)
             for (int j = 0; j < col; j++)
             {
