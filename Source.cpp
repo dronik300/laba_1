@@ -1,50 +1,23 @@
 #include <iostream>
 using namespace std;
 
-class matrix
+int input_check(char s[])
 {
-    int Row, Col; 
-    int** Value;  
-public:
-
-    matrix(int, int);  //конструктор
-    matrix(const matrix&); //копирующий конструктор
-    int GetRow(); //число строк
-    int GetCol(); //число столбцов
-
-    friend ostream& operator<<(ostream& ostr, matrix& m);//перегрузка вывода
-    friend istream& operator>>(istream& istr, matrix& m);//перегрузка ввода
-    friend matrix operator-(matrix& m1, matrix& m2);//перегрузка минус
-    friend bool operator== (matrix& m1, matrix& m2);//перегрузка сравнения
-
-    ~matrix(); //деструктор
-
-    matrix& operator=(const matrix& m)
+    int i = 0, n = 0;
+    while (s[i])
     {
-        matrix tmp(m);
-        swap(tmp);
-        return *this;
-    }
-
-private:
-    void swap(matrix& m)
-    {
+        if (int(s[i]) >= 48 && int(s[i]) <= 57)
+            n = n * 10 + int(s[i] - 48);
+        else
         {
-            int tmp = Row; Row = m.Row; m.Row = tmp;
-            tmp = Col; Col = m.Col; m.Col = tmp;
+            cout << "Vvedeno ne chislo, vvedite chislo\n";
+            cin >> s;
+            return input_check(s);
         }
-        int** tmp = Value; Value = m.Value; m.Value = tmp;
+        i++;
     }
-
-};
-
-
-matrix::matrix(int row, int col)
-{
-    Row = row;  
-    Col = col;
-    Value = new int* [row]; #include <iostream>
-using namespace std;
+    return n;
+}
 
 class matrix
 {
@@ -72,8 +45,8 @@ public:
     int GetRow(); //число строк
     int GetCol(); //число столбцов
 
-    friend ostream& operator<<(ostream& ostr, matrix& m);//перегрузка вывода
-    friend istream& operator>>(istream& istr, matrix& m);//перегрузка ввода
+    friend ostream& operator<<(ostream& ostr, matrix& m);//перегрузка оператора вывода
+    friend istream& operator>>(istream& istr, matrix& m);//перегрузка оператора ввода
     friend matrix operator-(matrix& m1, matrix& m2);//перегрузка минуса 
     friend bool operator== (matrix& m1, matrix& m2);//перегрузка сравнения
 
@@ -203,19 +176,23 @@ int main()
     matrix mas[3];
     int** el;
     int i, j, row, col,k, num;
+    char data[10];
     for( k=0; k<3; k++)
     {
         cout << "enter Row \n";
-        cin >> row;
+        cin >> data;
+        row = input_check(data);
         cout << "enter Col\n";
-        cin >> col;
+        cin >> data;
+        col = input_check(data);
         el = new int* [row];
         for (int i = 0; i < row; i++)
             el[i] = new int[col];
         for (int i = 0; i < row; i++)
             for (int j = 0; j < col; j++)
             {
-                cin >> el[i][j];
+                cin >> data;
+                el[i][j] = input_check(data);
             }
         mas[k] = { row, col, el };
     }
@@ -234,21 +211,28 @@ int main()
     cout << "--------------------------------\n";
 
     cout << "enter row\n";
-    cin >> row;
+    cin >> data;
+    row = input_check(data);
     cout << "enter col\n";
-    cin >> col;
+    cin >> data;
+    col = input_check(data);
     cout << "enter mas index\n";
-    cin >> k;
+    cin >> data;
+    k = input_check(data);
     mas[k-1].Print_element(row-1,col-1);
 
     cout << "enter row\n";
-    cin >> row;
+    cin >> data;
+    row = input_check(data);
     cout << "enter col\n";
-    cin >> col;
-    cout << "enter mas index\n";
-    cin >> k;
+    cin >> data;
+    col = input_check(data);
     cout << "enter num\n";
-    cin >> num;
+    cin >> data;
+    num = input_check(data);
+    cout << "enter mas index\n";
+    cin >> data;
+    k = input_check(data);
     mas[k-1].Set_element(row-1, col-1,num);
     cout << mas[k-1] << "\n";
     matrix raz;
