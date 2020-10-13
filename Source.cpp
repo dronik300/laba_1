@@ -52,7 +52,6 @@ public:
     int GetCol(); //число столбцов
 
     friend ostream& operator<<(ostream& ostr, matrix& m);//перегрузка оператора вывода
-    friend istream& operator>>(istream& istr, matrix& m);//перегрузка оператора ввода
     friend matrix operator-(matrix& m1, matrix& m2);//перегрузка минуса 
     friend bool operator== (matrix& m1, matrix& m2);//перегрузка сравнения
 
@@ -126,14 +125,6 @@ void matrix::Print_element(int i, int j)
 void matrix::Set_element(int i, int j, int num)
 {
     Value[i][j]=num;
-}
-
-istream& operator>>(istream& in, matrix& m) // ввод матрицы
-{
-    for (int i = 0; i < m.GetRow(); i++)
-        for (int j = 0; j < m.GetCol(); j++)
-            in >> m.Value[i][j];
-    return(in);
 }
 
 ostream& operator<<(ostream& out, matrix& m) //вывод матрицы
