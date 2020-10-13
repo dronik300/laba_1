@@ -3,7 +3,12 @@ using namespace std;
 
 int input_check(char s[])
 {
-    int i = 0, n = 0;
+    int i = 0, n = 0, f = 0;
+    if (s[0] == '-')
+    {
+        f = 1;
+        i++;
+    }
     while (s[i])
     {
         if (int(s[i]) >= 48 && int(s[i]) <= 57)
@@ -16,9 +21,10 @@ int input_check(char s[])
         }
         i++;
     }
+    if (f == 1)
+        return -n;
     return n;
 }
-
 class matrix
 {
     int Row, Col;  
